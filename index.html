@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* Estilos base (Tema Claro) */
         body {
@@ -203,6 +202,43 @@
             const outputDiv = document.getElementById('output-document');
             const clearButton = document.getElementById('clear-button');
 
+            // --- Salvar e Carregar do Local Storage ---
+            const fields = [
+                'input-institution', 'input-author', 'input-title', 'input-city', 
+                'input-date-year', 'input-work-type', 'input-advisor', 'input-acknowledgments', 
+                'input-abstract', 'input-intro', 'input-development', 'input-conclusion', 'input-references'
+            ];
+            
+            // Função para carregar os dados
+            const loadData = () => {
+                fields.forEach(fieldId => {
+                    const savedData = localStorage.getItem(fieldId);
+                    if (savedData) {
+                        document.getElementById(fieldId).value = savedData;
+                    }
+                });
+            };
+
+            // Função para salvar os dados
+            const saveData = () => {
+                fields.forEach(fieldId => {
+                    const value = document.getElementById(fieldId).value;
+                    localStorage.setItem(fieldId, value);
+                });
+            };
+
+            // Carregar os dados ao iniciar
+            loadData();
+
+            // Adicionar evento para salvar a cada digitação
+            fields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element) {
+                    element.addEventListener('input', saveData);
+                }
+            });
+            // --- Fim Salvar e Carregar do Local Storage ---
+
             themeToggleBtn.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
                 if (body.classList.contains('dark-mode')) {
@@ -358,6 +394,11 @@
                 outputDiv.classList.remove('p-0', 'flex', 'flex-col', 'space-y-8');
                 outputDiv.classList.add('border-dashed', 'border-gray-300', 'p-8');
                 downloadButton.classList.add('hidden');
+
+                // Limpar também o local storage
+                fields.forEach(fieldId => {
+                    localStorage.removeItem(fieldId);
+                });
             });
 
             downloadButton.addEventListener('click', function() {
