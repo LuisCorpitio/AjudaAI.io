@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo ABNT - Ajuda Aí</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos base (Tema Claro) */
+        body {
+            font-family: 'Times New Roman', serif;
+            transition: background-color 0.5s, color 0.5s;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .abnt-page {
+            background-color: #ffffff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+        }
+        .container input, .container textarea {
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        .container label {
+            color: #4b5563;
+        }
+
+        /* Tema Escuro */
+        body.dark-mode {
+            background-color: #1f2937; /* Cor de fundo escura */
+            color: #f3f4f6; /* Cor do texto clara */
+        }
+        body.dark-mode .container {
+            background-color: #2d3748; /* Fundo do container escuro */
+            color: #f3f4f6;
+        }
+        body.dark-mode .abnt-page {
+            background-color: #1a202c; /* Fundo da página ABNT bem escuro */
+            color: #f3f4f6;
+            border: 1px solid #4a5568;
+        }
+        body.dark-mode .container input, body.dark-mode .container textarea {
+            background-color: #2d3748;
+            color: #f3f4f6;
+            border: 1px solid #4a5568;
+        }
+        body.dark-mode .container label {
+            color: #f3f4f6;
+        }
+        
+        /* Estilos comuns */
+        .container {
+            max-width: 900px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+        }
+        .abnt-page {
+            padding: 3.5rem;
+            padding-left: 4.5rem;
+            padding-right: 2.5rem;
+            min-height: 1123px;
+            font-size: 12pt;
+            line-height: 1.5;
+        }
+        .abnt-page h1, .abnt-page h2, .abnt-page h3 {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12pt;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .abnt-page p {
+            text-align: justify;
+            margin-bottom: 1.5rem;
+            text-indent: 1.25cm;
+        }
+        .abnt-title {
+            text-align: center;
+            font-size: 12pt;
+            font-weight: bold;
+            margin-bottom: 3.5rem;
+            text-transform: uppercase;
+        }
+        .abnt-abstract, .abnt-references {
+            text-align: justify;
+            text-indent: 0;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-6">
+
+    <div class="container rounded-lg p-8 space-y-8 mb-8">
+        <header class="text-center space-y-2">
+            <h1 class="text-4xl font-extrabold">Protótipo Ajuda Aí</h1>
+            <p class="text-lg">Simulação completa de um trabalho ABNT</p>
+            <button id="theme-toggle" class="mt-4 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300 bg-gray-200 text-gray-800 hover:bg-gray-300">
+                Alternar Tema
+            </button>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Coluna de Entrada de Dados -->
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <label for="input-institution" class="block text-sm font-medium">Nome da Instituição:</label>
+                    <input type="text" id="input-institution" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                <div class="space-y-2">
+                    <label for="input-author" class="block text-sm font-medium">Nome do Autor:</label>
+                    <input type="text" id="input-author" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                <div class="space-y-2">
+                    <label for="input-title" class="block text-sm font-medium">Título do Trabalho:</label>
+                    <input type="text" id="input-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="input-city" class="block text-sm font-medium">Cidade:</label>
+                        <input type="text" id="input-city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="input-date-year" class="block text-sm font-medium">Data e Ano:</label>
+                        <input type="text" id="input-date-year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Ex: 2025 ou Mês, Ano">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="input-advisor" class="block text-sm font-medium">Nome do Orientador (Opcional):</label>
+                    <input type="text" id="input-advisor" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="input-acknowledgments" class="block text-sm font-medium">Agradecimentos (Opcional):</label>
+                    <textarea id="input-acknowledgments" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="input-abstract" class="block text-sm font-medium">Resumo:</label>
+                    <textarea id="input-abstract" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label for="input-intro" class="block text-sm font-medium">Introdução:</label>
+                    <textarea id="input-intro" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label for="input-development" class="block text-sm font-medium">Desenvolvimento:</label>
+                    <textarea id="input-development" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label for="input-conclusion" class="block text-sm font-medium">Conclusão:</label>
+                    <textarea id="input-conclusion" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label for="input-references" class="block text-sm font-medium">Referências (uma por linha):</label>
+                    <textarea id="input-references" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button id="generate-button" class="flex-1 w-full text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors" style="background-color: #38761d;">
+                        Gerar Documento ABNT
+                    </button>
+                    <button id="clear-button" class="w-24 bg-red-500 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-red-600 transition-colors">
+                        Limpar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Coluna de Saída (Visualização ABNT) -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold">Visualização do Documento</h2>
+                <div id="output-document" class="border-dashed border-2 border-gray-300 p-8">
+                    <p class="text-center italic">O documento ABNT será gerado aqui.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    themeToggleBtn.classList.remove('bg-gray-800', 'text-white', 'hover:bg-gray-700');
+                    themeToggleBtn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                } else {
+                    body.classList.add('dark-mode');
+                    themeToggleBtn.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                    themeToggleBtn.classList.add('bg-gray-800', 'text-white', 'hover:bg-gray-700');
+                }
+            });
+
+            document.getElementById('generate-button').addEventListener('click', function() {
+                const outputDiv = document.getElementById('output-document');
+                const institution = document.getElementById('input-institution').value;
+                const title = document.getElementById('input-title').value;
+                const author = document.getElementById('input-author').value;
+                const city = document.getElementById('input-city').value;
+                const dateYear = document.getElementById('input-date-year').value;
+                const advisor = document.getElementById('input-advisor').value;
+                const acknowledgments = document.getElementById('input-acknowledgments').value;
+                const abstract = document.getElementById('input-abstract').value;
+                const intro = document.getElementById('input-intro').value;
+                const development = document.getElementById('input-development').value;
+                const conclusion = document.getElementById('input-conclusion').value;
+                const references = document.getElementById('input-references').value.split('\n').filter(Boolean);
+
+                let outputHTML = '';
+                
+                outputHTML += `
+                    <div class="abnt-page flex flex-col justify-between">
+                        <div class="text-center mt-20">
+                            <p class="mb-4">${institution || 'NOME DA INSTITUIÇÃO'}</p>
+                            <p class="font-bold text-center">${author || 'Nome do Autor'}</p>
+                        </div>
+                        <div class="text-center flex-grow flex items-center justify-center">
+                            <h1 class="text-2xl font-bold uppercase leading-snug">${title || 'TÍTULO DO TRABALHO'}</h1>
+                        </div>
+                        <div class="text-center mb-20">
+                            <p>${city || 'Cidade'}</p>
+                            <p>${dateYear || 'Ano'}</p>
+                        </div>
+                    </div>
+                `;
+
+                outputHTML += `
+                    <div class="abnt-page flex flex-col justify-between">
+                        <div class="text-center mt-20">
+                            <p class="font-bold text-center">${author || 'Nome do Autor'}</p>
+                        </div>
+                        <div class="text-center flex-grow flex items-center justify-center">
+                            <h1 class="text-2xl font-bold uppercase leading-snug">${title || 'TÍTULO DO TRABALHO'}</h1>
+                        </div>
+                        <div class="text-center text-sm mx-auto w-3/4">
+                            <p>Trabalho de Conclusão de Curso (TCC) apresentado ao curso de (Seu Curso) da (Sua Instituição) como requisito para a obtenção do título de (Título do Grau).
+                            </p>
+                            <p class="mt-4">Orientador(a): ${advisor || 'Nome do Orientador'}</p>
+                        </div>
+                        <div class="text-center mb-20">
+                            <p>${city || 'Cidade'}</p>
+                            <p>${dateYear || 'Ano'}</p>
+                        </div>
+                    </div>
+                `;
+
+                if (acknowledgments) {
+                    outputHTML += `
+                        <div class="abnt-page">
+                            <h2>AGRADECIMENTOS</h2>
+                            <p>${acknowledgments}</p>
+                        </div>
+                    `;
+                }
+
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2 class="font-bold text-center">SUMÁRIO</h2>
+                        <ul class="list-none space-y-4 pt-10">
+                            ${acknowledgments ? `<li><p class="abnt-abstract">AGRADECIMENTOS ............................................................................ <span class="float-right">1</span></p></li>` : ''}
+                            <li>
+                                <p class="abnt-abstract">1 RESUMO ............................................................................................ <span class="float-right">1</span></p>
+                            </li>
+                            <li>
+                                <p class="abnt-abstract">2 INTRODUÇÃO ................................................................................... <span class="float-right">2</span></p>
+                            </li>
+                            <li>
+                                <p class="abnt-abstract">3 DESENVOLVIMENTO .......................................................................... <span class="float-right">3</span></p>
+                            </li>
+                            <li>
+                                <p class="abnt-abstract">4 CONCLUSÃO .................................................................................... <span class="float-right">4</span></p>
+                            </li>
+                            <li>
+                                <p class="abnt-abstract">5 REFERÊNCIAS .................................................................................. <span class="float-right">5</span></p>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2>1 RESUMO</h2>
+                        <p class="abnt-abstract"><strong>${title || 'Título do Trabalho'}</strong></p>
+                        <p class="abnt-abstract">${abstract || 'Texto do resumo aqui.'}</p>
+                    </div>
+                `;
+                
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2>2 INTRODUÇÃO</h2>
+                        <p>${intro || 'Texto da introdução aqui. Este parágrafo demonstra o recuo e o espaçamento de 1,5 exigidos pela ABNT. Você pode preencher com seu próprio conteúdo na caixa de texto ao lado.'}</p>
+                    </div>
+                `;
+
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2>3 DESENVOLVIMENTO</h2>
+                        <p>${development || 'Texto do desenvolvimento aqui. Esta é a seção principal do trabalho. O conteúdo que você digitar aqui será formatado automaticamente.'}</p>
+                    </div>
+                `;
+
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2>4 CONCLUSÃO</h2>
+                        <p>${conclusion || 'Texto da conclusão aqui. Ele resume os principais pontos do trabalho e as descobertas feitas.'}</p>
+                    </div>
+                `;
+
+                outputHTML += `
+                    <div class="abnt-page">
+                        <h2>5 REFERÊNCIAS</h2>
+                        <ul class="list-none space-y-4 abnt-references pt-10">`;
+                if (references.length > 0) {
+                    references.forEach(ref => {
+                        outputHTML += `<li class="ml-0">${ref}</li>`;
+                    });
+                } else {
+                    outputHTML += `<li class="ml-0">Sua referência formatada apareceria aqui.</li>`;
+                }
+                outputHTML += `
+                        </ul>
+                    </div>
+                `;
+
+                outputDiv.innerHTML = outputHTML;
+                outputDiv.classList.remove('border-dashed', 'border-gray-300');
+                outputDiv.classList.add('p-0', 'flex', 'flex-col', 'space-y-8');
+            });
+
+            document.getElementById('clear-button').addEventListener('click', function() {
+                document.getElementById('input-institution').value = '';
+                document.getElementById('input-title').value = '';
+                document.getElementById('input-author').value = '';
+                document.getElementById('input-city').value = '';
+                document.getElementById('input-date-year').value = '';
+                document.getElementById('input-advisor').value = '';
+                document.getElementById('input-acknowledgments').value = '';
+                document.getElementById('input-abstract').value = '';
+                document.getElementById('input-intro').value = '';
+                document.getElementById('input-development').value = '';
+                document.getElementById('input-conclusion').value = '';
+                document.getElementById('input-references').value = '';
+                const outputDiv = document.getElementById('output-document');
+                outputDiv.innerHTML = '<p class="text-center italic">O documento ABNT será gerado aqui.</p>';
+                outputDiv.classList.remove('p-0', 'flex', 'flex-col', 'space-y-8');
+                outputDiv.classList.add('border-dashed', 'border-gray-300', 'p-8');
+            });
+        });
+    </script>
+</body>
+</html>
