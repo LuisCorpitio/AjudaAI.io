@@ -43,7 +43,7 @@
         }
         body.dark-mode .container {
             background-color: #2d3748;
-            color: #f3f4f6;
+            color: #f3f4c6;
         }
         body.dark-mode .abnt-page {
             background-color: #1a202c;
@@ -361,21 +361,151 @@
             });
 
             downloadButton.addEventListener('click', function() {
-                const element = document.getElementById('output-document');
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Dimensões do A4 em pontos (1pt = 0.3528mm)
+                const docWidth = doc.internal.pageSize.getWidth();
+                const docHeight = doc.internal.pageSize.getHeight();
+                
+                // Margens ABNT em pontos (3cm = 85.04pt, 2cm = 56.69pt)
+                const marginLeft = 85.04;
+                const marginRight = 56.69;
+                const marginTop = 85.04;
+                const marginBottom = 56.69;
+                
+                let cursorY = marginTop;
 
-                html2canvas(element).then(canvas => {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
+                // Função para adicionar texto com quebra de linha
+                const addText = (text, options = {}) => {
+                    const lines = doc.splitTextToSize(text, docWidth - marginLeft - marginRight);
+                    const lineHeight = 1.5 * 12; // 1.5 spacing, 12pt font
                     
-                    const imgData = canvas.toDataURL('image/png');
-                    const imgProps= doc.getImageProperties(imgData);
-                    const pdfWidth = doc.internal.pageSize.getWidth();
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    for (const line of lines) {
+                        if (cursorY + lineHeight > docHeight - marginBottom) {
+                            doc.addPage();
+                            cursorY = marginTop;
+                        }
+                        doc.text(line, marginLeft + options.indent || 0, cursorY);
+                        cursorY += lineHeight;
+                    }
+                };
+                
+                // Funções para adicionar seções
+                const addPageBreak = () => {
+                    doc.addPage();
+                    cursorY = marginTop;
+                };
 
-                    const title = document.getElementById('input-title').value || 'Trabalho ABNT';
-                    doc.save(`${title.replace(/ /g, '_')}.pdf`);
-                });
+                const addSectionTitle = (title) => {
+                    doc.setFont("Times-Bold", "normal");
+                    doc.setFontSize(12);
+                    doc.text(title, docWidth / 2, cursorY, { align: "center" });
+                    cursorY += 2 * 12; // Double spacing
+                    doc.setFont("Times-Roman", "normal");
+                };
+
+                const addSection = (title, content, hasIndent = true) => {
+                    addSectionTitle(title);
+                    if (content) {
+                        addText(content, { indent: hasIndent ? 35.43 : 0 }); // 1.25cm = 35.43pt
+                    }
+                    addPageBreak();
+                };
+
+                // Obter os dados do formulário
+                const institution = document.getElementById('input-institution').value || 'NOME DA INSTITUIÇÃO';
+                const title = document.getElementById('input-title').value || 'TÍTULO DO TRABALHO';
+                const author = document.getElementById('input-author').value || 'Nome do Autor';
+                const city = document.getElementById('input-city').value || 'Cidade';
+                const dateYear = document.getElementById('input-date-year').value || 'Ano';
+                const workType = document.getElementById('input-work-type').value;
+                const advisor = document.getElementById('input-advisor').value;
+                const acknowledgments = document.getElementById('input-acknowledgments').value;
+                const abstract = document.getElementById('input-abstract').value;
+                const intro = document.getElementById('input-intro').value;
+                const development = document.getElementById('input-development').value;
+                const conclusion = document.getElementById('input-conclusion').value;
+                const references = document.getElementById('input-references').value.split('\n').filter(Boolean);
+
+                // Capa
+                doc.setFontSize(12);
+                doc.setFont("Times-Roman", "normal");
+                doc.text(institution, docWidth / 2, marginTop + 50, { align: "center" });
+                doc.setFont("Times-Bold", "normal");
+                doc.text(author, docWidth / 2, marginTop + 70, { align: "center" });
+                doc.setFontSize(16);
+                doc.text(title, docWidth / 2, docHeight / 2, { align: "center", maxWidth: docWidth - marginLeft - marginRight });
+                doc.setFontSize(12);
+                doc.setFont("Times-Roman", "normal");
+                doc.text(city, docWidth / 2, docHeight - 70, { align: "center" });
+                doc.text(dateYear, docWidth / 2, docHeight - 50, { align: "center" });
+                doc.addPage();
+                
+                // Folha de Rosto
+                doc.setFontSize(12);
+                doc.setFont("Times-Bold", "normal");
+                doc.text(author, docWidth / 2, marginTop + 70, { align: "center" });
+                doc.setFontSize(16);
+                doc.text(title, docWidth / 2, docHeight / 2, { align: "center", maxWidth: docWidth - marginLeft - marginRight });
+                doc.setFontSize(12);
+                doc.setFont("Times-Roman", "normal");
+                if (workType) {
+                    doc.text(workType, docWidth / 2, docHeight - 150, { align: "center", maxWidth: docWidth - marginLeft - marginRight });
+                }
+                if (advisor) {
+                    doc.text(`Orientador(a): ${advisor}`, docWidth / 2, docHeight - 130, { align: "center" });
+                }
+                doc.text(city, docWidth / 2, docHeight - 70, { align: "center" });
+                doc.text(dateYear, docWidth / 2, docHeight - 50, { align: "center" });
+                doc.addPage();
+
+                // Sumário (apenas texto por enquanto)
+                addSectionTitle("SUMÁRIO");
+                cursorY += 10;
+                doc.setFontSize(12);
+                if (acknowledgments) {
+                    doc.text("AGRADECIMENTOS", marginLeft, cursorY);
+                    doc.text("..... 1", docWidth - marginRight, cursorY, { align: "right" });
+                    cursorY += 18;
+                }
+                doc.text("1 RESUMO", marginLeft, cursorY);
+                doc.text("..... 2", docWidth - marginRight, cursorY, { align: "right" });
+                cursorY += 18;
+                doc.text("2 INTRODUÇÃO", marginLeft, cursorY);
+                doc.text("..... 3", docWidth - marginRight, cursorY, { align: "right" });
+                cursorY += 18;
+                doc.text("3 DESENVOLVIMENTO", marginLeft, cursorY);
+                doc.text("..... 4", docWidth - marginRight, cursorY, { align: "right" });
+                cursorY += 18;
+                doc.text("4 CONCLUSÃO", marginLeft, cursorY);
+                doc.text("..... 5", docWidth - marginRight, cursorY, { align: "right" });
+                cursorY += 18;
+                doc.text("5 REFERÊNCIAS", marginLeft, cursorY);
+                doc.text("..... 6", docWidth - marginRight, cursorY, { align: "right" });
+                addPageBreak();
+                
+                // Agradecimentos (Opcional)
+                if (acknowledgments) {
+                    addSection("AGRADECIMENTOS", acknowledgments, false);
+                }
+
+                // Resumo
+                addSection("RESUMO", abstract, false);
+
+                // Introdução
+                addSection("INTRODUÇÃO", intro);
+
+                // Desenvolvimento
+                addSection("DESENVOLVIMENTO", development);
+
+                // Conclusão
+                addSection("CONCLUSÃO", conclusion);
+
+                // Referências
+                addSection("REFERÊNCIAS", references.join('\n'), false);
+
+                doc.save(`${title.replace(/ /g, '_')}.pdf`);
             });
         });
     </script>
